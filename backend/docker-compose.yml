@@ -1,0 +1,58 @@
+version: '3.9'
+services:
+  auth-service:
+    build: ./auth-service
+    ports:
+      - "8001:8000"
+    environment:
+      - ENV=dev
+  file-service:
+    build: ./file-service
+    ports:
+      - "8002:8000"
+    environment:
+      - ENV=dev
+  virus-scan-service:
+    build: ./virus-scan-service
+    ports:
+      - "8003:8000"
+    environment:
+      - ENV=dev
+  gateway:
+    build: ./gateway
+    ports:
+      - "8000:8000"
+    environment:
+      - ENV=dev
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: clouduser
+      POSTGRES_PASSWORD: cloudpass
+      POSTGRES_DB: cloud_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+  minio:
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: minioadmin
+      MINIO_ROOT_PASSWORD: minioadmin
+    volumes:
+      - minio-data:/data
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+  clamav:
+    image: clamav/clamav:latest
+    ports:
+      - "3310:3310"
+volumes:
+  pgdata:
+  minio-data:
