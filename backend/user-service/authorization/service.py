@@ -1,9 +1,9 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from models.user import User
-from ..security.password.password import verify_password
-from ..security.tokens.jwt import create_access_token, get_current_user
-from ..security.tokens.refresh import create_refresh_token, get_user_id_by_refresh, rotate_refresh_token
+from security.password.password import verify_password
+from security.tokens.jwt import create_access_token, get_current_user
+from security.tokens.refresh import create_refresh_token, get_user_id_by_refresh, rotate_refresh_token
 from fastapi import HTTPException, Depends
 
 async def login_user(email: str, password: str, session: AsyncSession):

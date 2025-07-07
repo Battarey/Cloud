@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
-from ..database import get_async_session
+from database import get_async_session
 from pydantic import BaseModel, EmailStr, Field
 from .service import login_user, refresh_user_token, get_me_user
 from security.tokens.jwt import get_current_user

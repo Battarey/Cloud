@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from models.user import User
 from models.stat_update import StatUpdate
-from ..database import get_async_session
+from database import get_async_session
 
 router = APIRouter(prefix="/user-stat", tags=["user-stat"])
 

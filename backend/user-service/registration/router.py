@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 from schemas.user import UserCreate, UserRead
-from ..database import get_async_session
+from database import get_async_session
 from .service import register_user_service
 
 router = APIRouter(prefix="/register", tags=["registration"])

@@ -1,11 +1,14 @@
 version: '3.9'
 services:
   user-service:
-    build: ./auth-service
+    build:
+      context: .
+      dockerfile: user-service/Dockerfile
     ports:
       - "8001:8000"
     environment:
       - ENV=dev
+      - DATABASE_URL=${DATABASE_URL}
   file-service:
     build: ./file-service
     ports:

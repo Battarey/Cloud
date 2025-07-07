@@ -1,9 +1,11 @@
 fastapi
 uvicorn[standard]
-SQLAlchemy>=2.0
+sqlalchemy
 asyncpg
+alembic
 python-dotenv
 pydantic
 redis
 python-jose[cryptography]
 passlib[bcrypt]
+email-validator

@@ -1,7 +1,7 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
 from models.user import User
-from ..security.password.password import get_password_hash
+from security.password.password import get_password_hash
 from schemas.user import UserCreate
 from fastapi import HTTPException
 
