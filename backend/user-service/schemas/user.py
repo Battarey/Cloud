@@ -30,4 +30,4 @@ class UserRead(BaseModel):
     free_space: int
 
     class Config:
-        orm_mode = True
+        from_attributes = True

@@ -1,9 +1,12 @@
 """create users table
 
 Revision ID: 0001
-Revises: 
+Revises: 0000
 Create Date: 2025-07-07
 """
+revision = '0001'
+down_revision = '0000'
+
 from alembic import op
 import sqlalchemy as sa
 
