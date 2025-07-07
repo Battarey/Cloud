@@ -3,22 +3,28 @@
 ## Описание
 Микросервисный backend для облачного хранилища на Python (FastAPI).
 
-## Архитектура проекта
+## Архитектура backend
 ```
 backend
-├── auth-service/                # сервис аутентификации и авторизации
 ├── file-service/                # сервис для работы с файлами
-├── virus-scan-service/          # сервис проверки файлов на вирусы (ClamAV)
 ├── gateway/                     # API Gateway, единая точка входа
-├── .env                         # переменные окружения 
+├── user-service/                # сервис для работы с пользователем 
+├── virus-scan-service/          # сервис проверки файлов на вирусы (ClamAV)
+├── .env.example                 # переменные окружения 
 ├── docker-compose.yml           # оркестрация сервисов и инфраструктуры 
-└── README.md
+├── README.md
+└── requirements.txt             # файл с основными зависимостями для backend
 ```
 
 ## Запуск
 ```
 docker compose up --build
 ```
+
+## Используемые инструменты
+- PostgreSQL
+- MinIO
+- Redis
 
 ## Переменные окружения
 - .env — настройки БД, MinIO и др.

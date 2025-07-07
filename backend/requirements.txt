@@ -1,13 +1,9 @@
 fastapi
 uvicorn[standard]
 SQLAlchemy>=2.0
-alembic
 asyncpg
 python-dotenv
 pydantic
 redis
-minio
 python-jose[cryptography]
 passlib[bcrypt]
-httpx
-sqlalchemy[asyncio]
