@@ -25,6 +25,7 @@ docker compose up --build
 - PostgreSQL
 - MinIO
 - Redis
+- ClamAV
 
 ## Переменные окружения
 - .env — настройки БД, MinIO и др.

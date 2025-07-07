@@ -6,21 +6,22 @@
 ## Архитектура user-service
 ```
 user-service
+├── alembic/            # папка для alembic миграций
 ├── authorization/      # авторизация (логин, refresh, получение текущего пользователя)
-├── registration/       # регистрация пользователей
 ├── delete_account/     # удаление аккаунта
 ├── logout/             # выход из аккаунта (revoke refresh token)
 ├── models/             # модели БД
+├── registration/       # регистрация пользователей
 ├── schemas/            # Pydantic-схемы
 ├── security/           # безопасность: токены, пароли, лимитеры
 ├── statistics/         # статистика пользователя
-├── main.py             # точка входа FastAPI
+├── alembic.ini         # файл для работы с alembic
 ├── database.py         # подключение к БД
-└── README.md           
+├── Dockerfile
+├── main.py
+└── README.md
 ```
 
 ## TODO
-- Интеграция с Alembic
 - Покрытие тестами
 - Рефакторинг
-
