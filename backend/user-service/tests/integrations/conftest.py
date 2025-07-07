@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 # URL для тестового API
-API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_URL = os.getenv("API_URL", "http://host.docker.internal:8000")
 
 @pytest.fixture(scope="session")
 def event_loop():
