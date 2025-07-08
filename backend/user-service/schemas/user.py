@@ -24,7 +24,6 @@ class UserRead(BaseModel):
     id: UUID
     email: EmailStr
     username: str
-    is_active: bool
     files_count: int
     files_size: int
     free_space: int

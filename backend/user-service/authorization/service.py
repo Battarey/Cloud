@@ -19,7 +19,11 @@ async def refresh_user_token(refresh_token: str):
     user_id = await get_user_id_by_refresh(refresh_token)
     if not user_id:
         raise HTTPException(status_code=401, detail="Invalid refresh token")
-    new_refresh_token = await rotate_refresh_token(refresh_token, user_id)
+    try:
+        new_refresh_token = await rotate_refresh_token(refresh_token, user_id)
+    except Exception as e:
+        # Если токен уже был использован или отозван — возвращаем 401, а не 500
+        raise HTTPException(status_code=401, detail="Refresh token already used or revoked")
     access_token = create_access_token({"sub": user_id})
     return {"access_token": access_token, "refresh_token": new_refresh_token, "token_type": "bearer"}
 

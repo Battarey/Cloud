@@ -3,7 +3,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 import time
 from collections import defaultdict
 
-LOGIN_RATE_LIMIT = 5  # попыток
+LOGIN_RATE_LIMIT = 10  # попыток
 LOGIN_RATE_PERIOD = 60  # секунд
 
 class LoginRateLimiter(BaseHTTPMiddleware):

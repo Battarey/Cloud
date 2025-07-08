@@ -7,7 +7,7 @@ from sqlalchemy.orm import sessionmaker
 import os
 
 # URL для тестового API
-API_URL = os.getenv("API_URL", "http://host.docker.internal:8000")
+API_URL = "http://host.docker.internal:8001"
 
 @pytest.fixture(scope="session")
 def event_loop():
@@ -19,5 +19,3 @@ def event_loop():
 async def async_client():
     async with httpx.AsyncClient(base_url=API_URL, timeout=10.0) as client:
         yield client
-
-# TODO: добавить фикстуры для очистки БД и Redis между тестами

@@ -11,7 +11,6 @@ class User(Base):
     email = Column(String, unique=True, index=True, nullable=False)
     username = Column(String(32), unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
-    is_active = Column(Boolean, default=True)
     files_count = Column(Integer, nullable=False, default=0)
     files_size = Column(BigInteger, nullable=False, default=0)
     free_space = Column(BigInteger, nullable=False, default=10*1024*1024*1024)  # 10 ГБ

@@ -4,13 +4,8 @@ from statistics.router import router as stat_router
 from authorization.router import router as auth_router
 from logout.router import router as logout_router
 from delete_account.router import router as delete_account_router
-from security.limiter.rate_limit import RateLimiter
-from security.limiter.login_rate_limit import LoginRateLimiter
 
 app = FastAPI(title="User Service")
-app.add_middleware(RateLimiter)
-app.add_middleware(LoginRateLimiter)
-
 app.include_router(registration_router)
 app.include_router(stat_router)
 app.include_router(auth_router)
