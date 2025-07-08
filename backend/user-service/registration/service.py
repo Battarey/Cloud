@@ -15,4 +15,12 @@ async def register_user_service(user: UserCreate, session: AsyncSession) -> User
     session.add(db_user)
     await session.commit()
     await session.refresh(db_user)
-    return db_user
+    # Возвращаем только нужные поля для UserRead
+    return {
+        "id": db_user.id,
+        "email": db_user.email,
+        "username": db_user.username,
+        "files_count": db_user.files_count,
+        "files_size": db_user.files_size,
+        "free_space": db_user.free_space,
+    }

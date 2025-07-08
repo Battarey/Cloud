@@ -11,7 +11,7 @@ async def test_logout_success(async_client: AsyncClient):
     refresh_token = tokens["refresh_token"]
     resp2 = await async_client.post("/logout/", json={"refresh_token": refresh_token})
     assert resp2.status_code == 200
-    assert "ok" in resp2.text or resp2.json().get("status") == "ok"
+    assert resp2.json().get("status") == "logged out"
 
 @pytest.mark.asyncio
 async def test_logout_invalid_token(async_client: AsyncClient):

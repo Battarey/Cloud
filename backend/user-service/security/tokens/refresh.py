@@ -30,9 +30,5 @@ async def revoke_refresh_token(token: str):
     await redis_client.delete(f"refresh:{token}")
 
 async def rotate_refresh_token(old_token: str, user_id: str) -> str:
-    # Проверяем, не был ли токен уже отозван (использован)
-    exists = await redis_client.exists(f"refresh:{old_token}")
-    if not exists:
-        raise Exception("Refresh token already used or revoked")
     await revoke_refresh_token(old_token)
     return await create_refresh_token(user_id)

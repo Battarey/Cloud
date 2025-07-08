@@ -13,6 +13,8 @@ async def update_user_stat(data: StatUpdate, session: AsyncSession = Depends(get
     user = result.scalar_one_or_none()
     if not user:
         raise HTTPException(status_code=404, detail="User not found")
+    if data.file_size < 0:
+        raise HTTPException(status_code=422, detail="file_size must be non-negative")
     if data.action == "upload":
         user.files_count += 1
         user.files_size += data.file_size

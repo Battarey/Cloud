@@ -11,7 +11,7 @@ async def test_delete_account_success(async_client: AsyncClient):
     headers = {"Authorization": f"Bearer {access_token}"}
     resp = await async_client.delete("/delete-account/", headers=headers)
     assert resp.status_code == 200
-    assert "ok" in resp.text or resp.json().get("status") == "ok"
+    assert resp.json().get("status") == "deleted"
 
 @pytest.mark.asyncio
 async def test_delete_account_unauthorized(async_client: AsyncClient):

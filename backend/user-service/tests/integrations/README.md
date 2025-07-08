@@ -9,3 +9,12 @@ docker compose run --rm user-service pytest tests/integrations/NAME_TEST.py
 ```
 docker compose run --rm user-service pytest tests/integrations/NAME_TEST.py::NAME_FUNCTION
 ```
+
+## Статистика тестов
+- test_authorization_integration          # Пройден
+- test_delete_account_integration         # Пройден
+- test_limiter_integration                # Пройден
+- test_logout_integration                 # Пройден
+- test_registration_integration           # Пройден
+- test_security_integration               # Пройден
+- test_statistics_integration             # Пройден
