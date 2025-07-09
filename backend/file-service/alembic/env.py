@@ -7,13 +7,13 @@ from alembic import context
 import sys
 import os
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
-from models.user import Base  # noqa
+from models.file import Base  # noqa
 
 config = context.config
 fileConfig(config.config_file_name)
 target_metadata = Base.metadata
 
-DB_URL = os.getenv("DATABASE_URL")
+DB_URL = os.getenv("DATABASE_URL", "postgresql+asyncpg://clouduser:cloudpass@postgres:5432/cloud_db")
 config.set_main_option("sqlalchemy.url", DB_URL)
 
 def run_migrations_offline():

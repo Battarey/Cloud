@@ -21,6 +21,18 @@ backend
 docker compose up --build
 ```
 
+## Применение Alembic миграций
+Сначала исправить .env, убрать из DATABASE_URL символы "+asyncpg"
+- User-serive:
+```
+-
+```
+- File-service:
+```
+docker compose run --rm --workdir /app/file-service file-service alembic -c alembic.ini upgrade head
+```
+Добавить обратно "+asyncpg" в DATABASE_URL 
+
 ## Используемые инструменты
 - PostgreSQL
 - MinIO

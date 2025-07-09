@@ -10,11 +10,20 @@ services:
       - ENV=dev
       - DATABASE_URL=${DATABASE_URL}
   file-service:
-    build: ./file-service
+    build:
+      context: .
+      dockerfile: file-service/Dockerfile
     ports:
       - "8002:8000"
     environment:
       - ENV=dev
+      - DATABASE_URL=${DATABASE_URL}
+      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
+      - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
+      - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
+      - MINIO_BUCKET=${MINIO_BUCKET}
+    volumes:
+      - ./file-service/alembic/versions:/app/file-service/alembic/versions
   virus-scan-service:
     build: ./virus-scan-service
     ports:

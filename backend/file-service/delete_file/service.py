@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.file import File as FileModel
-from minio.minio_client import minio_client, MINIO_BUCKET
+from minio_utils.minio_client import minio_client, MINIO_BUCKET
 from sqlalchemy.future import select
 from statistics.utils import update_user_stat
 

@@ -1,6 +1,6 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.file import File as FileModel
-from storage.minio_client import minio_client, MINIO_BUCKET
+from minio_utils.minio_client import minio_client, MINIO_BUCKET
 from sqlalchemy.future import select
 
 async def delete_folder_by_id(folder_id: str, user_id: str, session: AsyncSession):
