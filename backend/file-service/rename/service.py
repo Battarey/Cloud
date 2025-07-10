@@ -12,3 +12,16 @@ async def rename_file(file_id: str, user_id: str, new_name: str, session: AsyncS
     await session.commit()
     await session.refresh(file)
     return file
+
+async def rename_folder(folder_id: str, user_id: str, new_name: str, session: AsyncSession):
+    result = await session.execute(select(FileModel).where(
+        FileModel.id == folder_id,
+        FileModel.user_id == user_id,
+        FileModel.content_type == 'folder'))
+    folder = result.scalar_one_or_none()
+    if not folder:
+        raise HTTPException(status_code=404, detail="Folder not found")
+    folder.filename = new_name
+    await session.commit()
+    await session.refresh(folder)
+    return folder

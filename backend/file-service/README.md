@@ -11,10 +11,11 @@ file-service
 ├── delete_file/        # удаление файла
 ├── delete_folder/      # удаление папки (с удалением всех файлов внутри)
 ├── download_file/      # скачивание файлов
+├── filtration/         # фильтрация файлов и папок
 ├── list_files/         # получение списка файлов и папок
 ├── minio/              # работа с MinIO
 ├── models/             # SQLAlchemy-модели
-├── rename_file/        # переименование файлов и папок
+├── rename/             # переименование файлов и папок
 ├── schemas/            # Pydantic-схемы
 ├── security/           # безопасность: JWT, Depends
 ├── tests/              # папка с тестами

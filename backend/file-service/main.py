@@ -5,7 +5,7 @@ from create_folder.router import router as create_folder_router
 from delete_folder.router import router as delete_folder_router
 from download_file.router import router as download_file_router
 from list_files.router import router as list_files_router
-from rename_file.router import router as rename_file_router
+from rename.router import router as rename_file_router
 
 app = FastAPI(title="File Service")
 

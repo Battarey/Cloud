@@ -25,7 +25,9 @@ services:
     volumes:
       - ./file-service/alembic/versions:/app/file-service/alembic/versions
   virus-scan-service:
-    build: ./virus-scan-service
+    build:
+      context: .
+      dockerfile: virus-scan-service/Dockerfile
     ports:
       - "8003:8000"
     environment:
