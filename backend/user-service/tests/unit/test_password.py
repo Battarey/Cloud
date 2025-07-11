@@ -1,9 +1,7 @@
-
-import sys
-import os
+import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 from security.password.password import get_password_hash, verify_password
-
+import pytest
 
 def test_password_hash_and_verify():
     password = "TestPassword123!"
@@ -11,9 +9,6 @@ def test_password_hash_and_verify():
     assert hashed != password
     assert verify_password(password, hashed)
     assert not verify_password("WrongPassword", hashed)
-
-
-import pytest
 
 @pytest.mark.parametrize("password", [
     "short",

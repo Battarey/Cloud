@@ -1,6 +1,5 @@
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy.future import select
 from registration.service import register_user_service
 from models.user import User
 from schemas.user import UserCreate
@@ -18,9 +17,9 @@ async def test_register_user_success(monkeypatch):
     # monkeypatch get_password_hash to return a static hash
     monkeypatch.setattr("security.password.password.get_password_hash", lambda x: "hashed")
     result = await register_user_service(user_data, session)
-    assert result.email == user_data.email
-    assert result.username == user_data.username
-    assert hasattr(result, "hashed_password")
+    assert result["email"] == user_data.email
+    assert result["username"] == user_data.username
+    # hashed_password не возвращается наружу, только внутри БД
 
 @pytest.mark.asyncio
 async def test_register_user_already_exists(monkeypatch):

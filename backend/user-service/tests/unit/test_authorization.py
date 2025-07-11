@@ -1,13 +1,11 @@
-import sys
-import os
+import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 import pytest
-from authorization.service import login_user, refresh_user_token, get_me_user
+from authorization.service import login_user, refresh_user_token
 from models.user import User
-from fastapi import HTTPException, Depends
-from unittest.mock import AsyncMock, patch
+from fastapi import HTTPException
+from unittest.mock import AsyncMock
 from sqlalchemy.ext.asyncio import AsyncSession
-
 from security.password.password import get_password_hash
 
 @pytest.mark.asyncio

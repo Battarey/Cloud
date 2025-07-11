@@ -1,8 +1,6 @@
-import sys
-import os
+import sys, os
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../../")))
 import pytest
-import asyncio
 from security.tokens.refresh import create_refresh_token, get_user_id_by_refresh, rotate_refresh_token
 import security.tokens.refresh as refresh_mod
 
