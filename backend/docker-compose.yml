@@ -1,4 +1,3 @@
-version: '3.9'
 services:
   user-service:
     build:
@@ -9,6 +8,10 @@ services:
     environment:
       - ENV=dev
       - DATABASE_URL=${DATABASE_URL}
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    depends_on:
+      - postgres
   file-service:
     build:
       context: .
@@ -24,6 +27,10 @@ services:
       - MINIO_BUCKET=${MINIO_BUCKET}
     volumes:
       - ./file-service/alembic/versions:/app/file-service/alembic/versions
+    command: >
+      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+    depends_on:
+      - postgres
   virus-scan-service:
     build:
       context: .
