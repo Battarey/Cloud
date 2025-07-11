@@ -2,8 +2,7 @@ import pytest
 import pytest_asyncio
 import asyncio
 import httpx
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine
 import os
 from sqlalchemy import text
 

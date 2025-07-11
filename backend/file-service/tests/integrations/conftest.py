@@ -1,32 +1,30 @@
 import pytest
-from httpx import AsyncClient
-from main import app
+import pytest_asyncio
+import asyncio
+import httpx
+from sqlalchemy.ext.asyncio import create_async_engine
+import os
+from sqlalchemy import text
+
+# URL для тестового API file-service
+API_URL = "http://host.docker.internal:8002"
 
 @pytest.fixture(scope="session")
-def anyio_backend():
-    return "asyncio"
+def event_loop():
+    loop = asyncio.get_event_loop()
+    yield loop
+    loop.close()
 
-@pytest.fixture
-def async_client():
-    return AsyncClient(app=app, base_url="http://test")
+@pytest_asyncio.fixture(autouse=True, scope="function")
+async def clean_db():
+    # Очистка всех таблиц перед каждым тестом
+    DATABASE_URL = os.environ["DATABASE_URL"]
+    engine = create_async_engine(DATABASE_URL, echo=False)
+    async with engine.begin() as conn:
+        await conn.execute(text("TRUNCATE TABLE files RESTART IDENTITY CASCADE;"))
+    yield
 
-@pytest.fixture
-def mock_jwt():
-    return "test.jwt.token"
-
-@pytest.fixture
-def mock_minio():
-    def _mock(*a, **k): return None
-    return _mock
-
-@pytest.fixture
-def mock_scan():
-    def _mock(result):
-        async def inner(*a, **k): return result
-        return inner
-    return _mock
-
-@pytest.fixture
-def mock_stat():
-    def _mock(*a, **k): return None
-    return _mock
+@pytest_asyncio.fixture(scope="function")
+async def async_client():
+    async with httpx.AsyncClient(base_url=API_URL, timeout=10.0) as client:
+        yield client
