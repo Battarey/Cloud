@@ -13,11 +13,15 @@ docker compose run --rm file-service pytest tests/integrations/NAME_TEST.py::NAM
 
 ## Структура и статистика тестов:
 ```
-test_create_folder_integration.py         # Не пройден
-test_delete_file_integration.py           # Не пройден
-test_delete_folder_integration.py         # Не пройден
-test_download_file_integration.py         # Не пройден
-test_list_files_integration.py            # Не пройден
-test_rename_integration.py                # Не пройден
-test_upload_file_integration.py           # Не пройден
+test_create_folder.py             # Пройден, 1 предупреждение
+test_delete_file.py               # Пройден, 1 предупреждение
+test_delete_folder.py             # Пройден, 1 предупреждение
+test_download_file.py             # Пройден, 1 предупреждение
+test_list_files.py                # Пройден, 1 предупреждение
+test_rename.py                    # Пройден, 1 предупреждение
+test_upload_file.py               # Не пройден
 ```
+
+## Подсказка
+Если тесты не работают и ты решил внести изменения - перезапусти все сервисы
+(CTRL + C в консоли, где запущен docker-compose, это сработает только если запущено без пометки -d, т.е ты запустил docker-compose с выводом логов)

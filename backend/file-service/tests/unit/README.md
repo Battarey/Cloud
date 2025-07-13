@@ -32,5 +32,9 @@ docker compose run --rm file-service pytest tests/unit/NAME_TEST.py::NAME_FUNCTI
 - test_upload_file.py        # Пройден
 ```
 
+## Подсказка
+Если тесты не работают и ты решил внести изменения - перезапусти все сервисы
+(CTRL + C в консоли, где запущен docker-compose, это сработает только если запущено без пометки -d, т.е ты запустил docker-compose с выводом логов)
+
 ## TODO
 Во время теста выпало 4 предупреждения, их надо исправить

@@ -14,4 +14,4 @@ class File(Base):
     size = Column(BigInteger, nullable=False)
     content_type = Column(String, nullable=False)
     storage_key = Column(String, nullable=False)
-    created_at = Column(DateTime, default=lambda: datetime.datetime.now(datetime.timezone.utc))
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)

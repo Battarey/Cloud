@@ -12,11 +12,15 @@ docker compose run --rm user-service pytest tests/integrations/NAME_TEST.py::NAM
 
 ## Структура и статистика тестов:
 ```
-- test_authorization_integration          # Пройден
-- test_delete_account_integration         # Пройден
-- test_limiter_integration                # Пройден
-- test_logout_integration                 # Пройден
-- test_registration_integration           # Пройден
-- test_security_integration               # Пройден
-- test_statistics_integration             # Пройден
+- test_authorization               # Пройден
+- test_delete_account              # Пройден
+- test_limiter                     # Пройден
+- test_logout                      # Пройден
+- test_registration                # Пройден
+- test_security                    # Пройден
+- test_statistics                  # Пройден
 ```
+
+## Подсказка
+Если тесты не работают и ты решил внести изменения - перезапусти все сервисы
+(CTRL + C в консоли, где запущен docker-compose, это сработает только если запущено без пометки -d, т.е ты запустил docker-compose с выводом логов)
