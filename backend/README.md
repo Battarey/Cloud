@@ -45,6 +45,9 @@ docker compose run --rm --workdir /app/file-service file-service alembic -c alem
 ## Безопасность
 - JWT, CORS, HTTPS, лимиты, защита от инъекций, проверка файлов
 
+## Работа с alembic 
+При каждом запуске docker-compose к БД автоматически применяются миграции из разных сервисов.
+
 ## TODO
 - Реализация сервисов
 - Документация API

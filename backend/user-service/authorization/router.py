@@ -15,14 +15,14 @@ class RefreshRequest(BaseModel):
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 
-@router.post("/login")
+@router.post("/login", description="Вход пользователя по email и паролю")
 async def login(data: LoginRequest, session: AsyncSession = Depends(get_async_session)):
     return await login_user(data.email, data.password, session)
 
-@router.post("/refresh")
+@router.post("/refresh", description="Обновление access-токена по refresh-токену")
 async def refresh_token(data: RefreshRequest):
     return await refresh_user_token(data.refresh_token)
 
-@router.get("/me")
+@router.get("/me", description="Получение профиля текущего пользователя")
 async def get_me(current_user: User = Depends(get_current_user)):
     return await get_me_user(current_user)

@@ -7,6 +7,6 @@ class RefreshRequest(BaseModel):
 
 router = APIRouter(prefix="/logout", tags=["logout"])
 
-@router.post("/")
+@router.post("/", description="Выход из аккаунта, отзыв refresh-токена")
 async def logout(data: RefreshRequest):
     return await logout_user_service(data.refresh_token)

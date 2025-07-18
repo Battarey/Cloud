@@ -13,3 +13,17 @@ delete_account/
 
 ## Основные задачи
 - Удаление аккаунта пользователя
+
+## API
+
+### DELETE /delete_account
+Удаление пользователя
+
+Заголовок: Authorization: Bearer <access_token>
+
+Успешный ответ:
+204 No Content
+
+Ошибки:
+- 401 Unauthorized — если токен невалиден
+- 404 Not Found — если пользователь не найден

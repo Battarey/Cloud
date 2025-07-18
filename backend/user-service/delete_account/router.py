@@ -7,6 +7,6 @@ from .service import delete_account_service
 
 router = APIRouter(prefix="/delete-account", tags=["delete-account"])
 
-@router.delete("/")
+@router.delete("/", description="Удаление аккаунта текущего пользователя")
 async def delete_account(current_user: User = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)):
     return await delete_account_service(current_user, session)

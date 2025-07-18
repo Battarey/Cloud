@@ -14,3 +14,31 @@ registration/
 ## Основные задачи
 - Регистрация нового пользователя
 - Валидация данных
+
+## API
+
+
+### POST /registration/register
+Регистрация нового пользователя
+
+Запрос:
+```
+{
+  "email": "user@example.com",
+  "password": "string",
+  "name": "Имя"
+}
+```
+Заголовок: Content-Type: application/json
+
+Успешный ответ:
+```
+{
+  "id": "uuid",
+  "email": "user@example.com",
+  "name": "Имя"
+}
+```
+
+Ошибки:
+- 400 Bad Request — некорректные данные или email уже занят
