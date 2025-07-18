@@ -11,7 +11,26 @@ rename_file/
 └── README.md
 ```
 
-## Основные задачи
-- Переименование файла (PATCH /files/{file_id})
-- Переименование папки (PATCH /folders/{folder_id})
-- Проверка прав доступа (только владелец)
+## API
+
+### PATCH /files/{file_id}
+Переименование файла пользователем
+Запрос:
+```
+{
+  "new_name": "new_file.txt"
+}
+```
+Заголовок: Authorization: Bearer <access_token>
+Ответ: объект FileRead
+
+### PATCH /folders/{folder_id}
+Переименование папки пользователем
+Запрос:
+```
+{
+  "new_name": "new_folder"
+}
+```
+Заголовок: Authorization: Bearer <access_token>
+Ответ: объект FileRead

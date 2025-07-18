@@ -11,7 +11,14 @@ delete_file/
 └── README.md
 ```
 
-## Основные задачи
-- Удаление файла пользователем (DELETE /files/{file_id})
-- Удаление файла из MinIO
-- Удаление метаданных файла из базы данных
+## API
+
+### DELETE /files/{file_id}
+Удаление файла пользователем
+Заголовок: Authorization: Bearer <access_token>
+Ответ:
+```
+{
+  "status": "deleted"
+}
+```

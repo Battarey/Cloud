@@ -6,7 +6,7 @@ from .service import delete_folder_by_id
 
 router = APIRouter(prefix="/folders", tags=["folders"])
 
-@router.delete("/{folder_id}")
+@router.delete("/{folder_id}", description="Удаление папки и всех файлов внутри пользователем")
 async def delete_folder(folder_id: str, user_id: str = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)):
     try:
         success = await delete_folder_by_id(folder_id, user_id, session)

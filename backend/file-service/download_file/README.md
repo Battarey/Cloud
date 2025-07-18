@@ -11,7 +11,9 @@ download_file/
 └── README.md
 ```
 
-## Основные задачи
-- Скачивание файла пользователем (GET /files/{file_id})
-- Проверка прав доступа (только владелец)
-- Получение файла из MinIO
+## API
+
+### GET /files/{file_id}
+Скачивание файла пользователем
+Заголовок: Authorization: Bearer <access_token>
+Ответ: файл в бинарном виде, заголовок Content-Disposition: attachment; filename="file.txt"

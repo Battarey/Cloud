@@ -11,7 +11,14 @@ delete_folder/
 └── README.md
 ```
 
-## Основные задачи
-- Удаление папки пользователем (DELETE /folders/{folder_id})
-- Удаление всех файлов внутри папки из MinIO
-- Удаление всех метаданных файлов и папки из базы данных
+## API
+
+### DELETE /folders/{folder_id}
+Удаление папки и всех файлов внутри пользователем
+Заголовок: Authorization: Bearer <access_token>
+Ответ:
+```
+{
+  "status": "deleted"
+}
+```

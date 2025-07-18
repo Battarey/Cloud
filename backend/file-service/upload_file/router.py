@@ -7,7 +7,7 @@ from .service import save_uploaded_file
 
 router = APIRouter(prefix="/files", tags=["files"])
 
-@router.post("/upload", response_model=FileRead)
+@router.post("/upload", response_model=FileRead, description="Загрузка файла пользователем")
 async def upload_file(
     upload: UploadFile = File(...),
     user_id: str = Depends(get_current_user),

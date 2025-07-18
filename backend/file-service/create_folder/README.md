@@ -11,6 +11,22 @@ create_folder/
 └── README.md
 ```
 
-## Основные задачи
-- Создание папки пользователем (POST /folders/create)
-- Сохранение информации о папке в базе данных
+## API
+
+### POST /folders/create
+Создание новой папки пользователем
+Запрос:
+```
+{
+  "folder_name": "new_folder"
+}
+```
+Заголовок: Authorization: Bearer <access_token>
+Ответ:
+```
+{
+  "id": "uuid",
+  "name": "new_folder",
+  "status": "created"
+}
+```

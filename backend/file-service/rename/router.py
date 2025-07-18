@@ -7,7 +7,7 @@ from schemas.file import FileRead
 
 router = APIRouter(prefix="/files", tags=["files"])
 
-@router.patch("/{file_id}", response_model=FileRead)
+@router.patch("/{file_id}", response_model=FileRead, description="Переименование файла пользователем")
 async def rename_file_endpoint(file_id: str, new_name: str, user_id: str = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)):
     try:
         file = await rename_file(file_id, user_id, new_name, session)
@@ -15,7 +15,7 @@ async def rename_file_endpoint(file_id: str, new_name: str, user_id: str = Depen
         raise e
     return file
 
-@router.patch("/folders/{folder_id}", response_model=FileRead)
+@router.patch("/folders/{folder_id}", response_model=FileRead, description="Переименование папки пользователем")
 async def rename_folder_endpoint(folder_id: str, new_name: str, user_id: str = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)):
     try:
         folder = await rename_folder(folder_id, user_id, new_name, session)

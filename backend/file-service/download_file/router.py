@@ -6,7 +6,7 @@ from .service import get_file_for_download
 
 router = APIRouter(prefix="/files", tags=["files"])
 
-@router.get("/{file_id}")
+@router.get("/{file_id}", description="Скачивание файла пользователем")
 async def download_file(file_id: str, user_id: str = Depends(get_current_user), session: AsyncSession = Depends(get_async_session)):
     try:
         response, file = await get_file_for_download(file_id, user_id, session)

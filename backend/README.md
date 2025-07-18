@@ -12,6 +12,7 @@ backend
 ├── virus-scan-service/          # сервис проверки файлов на вирусы (ClamAV)
 ├── .env.example                 # переменные окружения 
 ├── docker-compose.yml           # оркестрация сервисов и инфраструктуры 
+├── entrypoint.sh                # скрипт для применения alembic миграций (более подробно ниже)
 ├── README.md
 └── requirements.txt             # файл с основными зависимостями для backend
 ```
@@ -21,7 +22,7 @@ backend
 docker compose up --build
 ```
 
-## Применение Alembic миграций
+## Применение Alembic миграций (На данный момент не актуально)
 Сначала исправить .env, убрать из DATABASE_URL символы "+asyncpg"
 - User-serive:
 ```
@@ -44,6 +45,9 @@ docker compose run --rm --workdir /app/file-service file-service alembic -c alem
 
 ## Безопасность
 - JWT, CORS, HTTPS, лимиты, защита от инъекций, проверка файлов
+
+## entrypoint.sh
+Файл для того, чтобы скрипт ждал запуска контейнера с postgre, после чего к postgre применяются alembic миграции.
 
 ## Работа с alembic 
 При каждом запуске docker-compose к БД автоматически применяются миграции из разных сервисов.

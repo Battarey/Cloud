@@ -11,7 +11,19 @@ upload_file/
 └── service.py  # бизнес-логика загрузки
 ```
 
-## Основные задачи
-- Загрузка файла пользователем (POST /files/upload)
-- Сохранение файла в MinIO
-- Сохранение метаданных файла в базе данных
+## API
+
+### POST /files/upload
+Загрузка файла пользователем
+Запрос: multipart/form-data, поле upload
+Заголовок: Authorization: Bearer <access_token>
+Ответ:
+```
+{
+  "id": "uuid",
+  "filename": "file.txt",
+  "size": 12345,
+  "content_type": "text/plain",
+  "created_at": "2025-07-18T12:00:00"
+}
+```

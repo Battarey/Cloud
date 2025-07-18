@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends, Query
 from sqlalchemy.ext.asyncio import AsyncSession
 from database import get_async_session
@@ -12,7 +11,7 @@ from filtration.service import filter_files
 
 router = APIRouter(prefix="/files", tags=["files"])
 
-@router.get("/", response_model=List[FileRead])
+@router.get("/", response_model=List[FileRead], description="Получение списка файлов и папок пользователя с фильтрацией")
 async def list_files(
     folder_id: Optional[str] = None,
     name: Optional[str] = Query(None),

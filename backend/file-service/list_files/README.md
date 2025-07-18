@@ -11,7 +11,10 @@ list_files/
 └── README.md
 ```
 
-## Основные задачи
-- Получение списка файлов и папок пользователя (GET /files/)
-- Фильтрация по папке (folder_id)
-- Проверка прав доступа (только владелец)
+## API
+
+### GET /files/
+Получение списка файлов и папок пользователя
+Параметры: folder_id, name, created_from, created_to, size_min, size_max, file_type
+Заголовок: Authorization: Bearer <access_token>
+Ответ: массив объектов FileRead
