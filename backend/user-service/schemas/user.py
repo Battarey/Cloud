@@ -1,6 +1,7 @@
 from pydantic import BaseModel, EmailStr, Field, field_validator
 from uuid import UUID
 import re
+from pydantic import ConfigDict
 
 class UserCreate(BaseModel):
     email: EmailStr
@@ -28,5 +29,4 @@ class UserRead(BaseModel):
     files_size: int
     free_space: int
 
-    class Config:
-        from_attributes = True
+    model_config = ConfigDict(from_attributes=True)

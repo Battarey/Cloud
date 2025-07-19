@@ -12,15 +12,18 @@ def test_create_access_token():
     payload = jose_jwt.decode(token, os.getenv("SECRET_KEY", "secret"), algorithms=["HS256"])
     assert payload["sub"] == "user_id"
 
-def test_get_current_user_valid(monkeypatch):
+import pytest
+@pytest.mark.asyncio
+async def test_get_current_user_valid(monkeypatch):
     token = create_access_token({"sub": "user_id"})
     class DummyDepends:
         def __init__(self, value): self.value = value
         def __call__(self, *a, **k): return self.value
     monkeypatch.setattr('security.jwt.oauth2_scheme', DummyDepends(token))
-    user_id = get_current_user(token)
+    user_id = await get_current_user(token)
     assert user_id == "user_id"
 
-def test_get_current_user_invalid():
+@pytest.mark.asyncio
+async def test_get_current_user_invalid():
     with pytest.raises(HTTPException):
-        get_current_user("invalid.token")
+        await get_current_user("invalid.token")

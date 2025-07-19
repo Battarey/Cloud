@@ -4,21 +4,29 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock, patch
 from delete_file.service import delete_file_by_id
 
+import uuid
+
 @pytest.mark.asyncio
-def test_delete_file_by_id_success(monkeypatch):
+async def test_delete_file_by_id_success(monkeypatch):
     session = AsyncMock()
-    file = MagicMock()
-    session.execute.return_value.scalar_one_or_none.return_value = file
+    class DummyFile:
+        storage_key = 'key'
+        size = 123
+    mock_result = MagicMock()
+    mock_result.scalar_one_or_none.return_value = DummyFile()
+    session.execute.return_value = mock_result
     monkeypatch.setattr('delete_file.service.minio_client.remove_object', MagicMock())
     monkeypatch.setattr('delete_file.service.update_user_stat', AsyncMock())
     session.delete = AsyncMock()
     session.commit = AsyncMock()
-    result = pytest.run(asyncio=True)(delete_file_by_id)('file_id', 'user_id', session)
+    result = await delete_file_by_id(str(uuid.uuid4()), 'user_id', session)
     assert result is True
 
 @pytest.mark.asyncio
-def test_delete_file_by_id_not_found():
+async def test_delete_file_by_id_not_found():
     session = AsyncMock()
-    session.execute.return_value.scalar_one_or_none.return_value = None
-    result = pytest.run(asyncio=True)(delete_file_by_id)('file_id', 'user_id', session)
+    mock_result = MagicMock()
+    mock_result.scalar_one_or_none.return_value = None
+    session.execute.return_value = mock_result
+    result = await delete_file_by_id(str(uuid.uuid4()), 'user_id', session)
     assert result is False

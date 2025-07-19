@@ -35,7 +35,7 @@ async def clean_db():
 # Асинхронный http-клиент
 @pytest_asyncio.fixture(scope="function")
 async def async_client():
-    async with httpx.AsyncClient(base_url=API_URL, timeout=10.0) as client:
+    async with httpx.AsyncClient(base_url=API_URL, timeout=120.0) as client:
         yield client
 
 # Уникальный user_id для каждого теста
@@ -46,7 +46,10 @@ def test_user_id():
 # Фикстура: только токен, без создания файла
 @pytest.fixture
 def mock_jwt_empty(test_user_id):
-    return create_access_token({"sub": test_user_id})
+    from datetime import datetime, timedelta, timezone
+    exp = datetime.now(timezone.utc) + timedelta(minutes=60)
+    payload = {"sub": test_user_id, "exp": exp}
+    return create_access_token(payload)
 
 # Фикстура: токен + файл (по умолчанию)
 @pytest_asyncio.fixture

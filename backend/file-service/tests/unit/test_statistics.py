@@ -5,17 +5,17 @@ from unittest.mock import patch, AsyncMock
 from statistics.utils import update_user_stat
 
 @pytest.mark.asyncio
-def test_update_user_stat_success():
-    with patch('statistics.utils.httpx.AsyncClient') as mock_client:
-        mock_instance = mock_client.return_value.__aenter__.return_value
-        mock_instance.post = AsyncMock(return_value=AsyncMock(status_code=200, raise_for_status=lambda: None))
-        pytest.run(asyncio=True)(update_user_stat)('user_id', 'upload', 123)
-        mock_instance.post.assert_called_once()
+async def test_update_user_stat_success():
+    async_mock_client = AsyncMock()
+    async_mock_client.__aenter__.return_value.post = AsyncMock(return_value=AsyncMock(status_code=200, raise_for_status=lambda: None))
+    with patch('statistics.utils.httpx.AsyncClient', return_value=async_mock_client):
+        await update_user_stat('user_id', 'upload', 123)
+        async_mock_client.__aenter__.return_value.post.assert_called_once()
 
 @pytest.mark.asyncio
-def test_update_user_stat_fail():
-    with patch('statistics.utils.httpx.AsyncClient') as mock_client:
-        mock_instance = mock_client.return_value.__aenter__.return_value
-        mock_instance.post = AsyncMock(side_effect=Exception('fail'))
-        pytest.run(asyncio=True)(update_user_stat)('user_id', 'upload', 123)
-        mock_instance.post.assert_called_once()
+async def test_update_user_stat_fail():
+    async_mock_client = AsyncMock()
+    async_mock_client.__aenter__.return_value.post = AsyncMock(side_effect=Exception('fail'))
+    with patch('statistics.utils.httpx.AsyncClient', return_value=async_mock_client):
+        await update_user_stat('user_id', 'upload', 123)
+        async_mock_client.__aenter__.return_value.post.assert_called_once()

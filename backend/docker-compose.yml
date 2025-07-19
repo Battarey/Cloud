@@ -12,6 +12,8 @@ services:
       sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
     depends_on:
       - postgres
+    volumes:
+      - ./user-service:/app/user-service
   file-service:
     build:
       context: .
@@ -27,18 +29,11 @@ services:
       - MINIO_BUCKET=${MINIO_BUCKET}
     volumes:
       - ./file-service/alembic/versions:/app/file-service/alembic/versions
+      - ./file-service:/app/file-service
     command: >
       sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
     depends_on:
       - postgres
-  virus-scan-service:
-    build:
-      context: .
-      dockerfile: virus-scan-service/Dockerfile
-    ports:
-      - "8003:8000"
-    environment:
-      - ENV=dev
   gateway:
     build: ./gateway
     ports:
@@ -78,10 +73,6 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
-  clamav:
-    image: clamav/clamav:latest
-    ports:
-      - "3310:3310"
 volumes:
   pgdata:
   minio-data:

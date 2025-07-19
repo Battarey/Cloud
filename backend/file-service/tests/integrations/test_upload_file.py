@@ -10,7 +10,7 @@ async def test_upload_file_success(async_client, mock_jwt_empty):
         headers={'Authorization': f'Bearer {mock_jwt_empty}'}
     )
     assert response.status_code == 200
-    assert response.json()['filename'] == 'test.txt'
+    assert response.json()['filename'] == unique_name
 
 @pytest.mark.asyncio
 async def test_upload_file_unauthorized(async_client):
@@ -28,7 +28,7 @@ async def test_upload_file_too_large(async_client, mock_jwt_empty):
         files={'upload': ('big.txt', big_data, 'text/plain')},
         headers={'Authorization': f'Bearer {mock_jwt_empty}'}
     )
-    assert response.status_code in (400, 413)
+    assert response.status_code == 413
 
 @pytest.mark.asyncio
 async def test_upload_file_empty_name(async_client, mock_jwt_empty):
@@ -46,7 +46,7 @@ async def test_upload_file_forbidden_ext(async_client, mock_jwt_empty):
         files={'upload': ('test.exe', b'data', 'application/octet-stream')},
         headers={'Authorization': f'Bearer {mock_jwt_empty}'}
     )
-    assert response.status_code in (400, 415)
+    assert response.status_code == 415
 
 @pytest.mark.asyncio
 async def test_upload_file_duplicate(async_client, mock_jwt_empty):

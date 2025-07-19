@@ -9,8 +9,7 @@ backend
 ├── file-service/                # сервис для работы с файлами
 ├── gateway/                     # API Gateway, единая точка входа
 ├── user-service/                # сервис для работы с пользователем 
-├── virus-scan-service/          # сервис проверки файлов на вирусы (ClamAV)
-├── .env.example                 # переменные окружения 
+├── .env                         # переменные окружения 
 ├── docker-compose.yml           # оркестрация сервисов и инфраструктуры 
 ├── entrypoint.sh                # скрипт для применения alembic миграций (более подробно ниже)
 ├── README.md
@@ -48,9 +47,6 @@ docker compose run --rm --workdir /app/file-service file-service alembic -c alem
 
 ## entrypoint.sh
 Файл для того, чтобы скрипт ждал запуска контейнера с postgre, после чего к postgre применяются alembic миграции.
-
-## Работа с alembic 
-При каждом запуске docker-compose к БД автоматически применяются миграции из разных сервисов.
 
 ## TODO
 - Реализация сервисов

@@ -6,22 +6,29 @@ from download_file.service import get_file_for_download
 from fastapi import HTTPException
 
 @pytest.mark.asyncio
-def test_get_file_for_download_success(monkeypatch):
+async def test_get_file_for_download_success(monkeypatch):
     session = AsyncMock()
-    file = MagicMock()
-    file.content_type = 'text/plain'
-    file.filename = 'test.txt'
-    file.storage_key = 'key'
-    session.execute.return_value.scalar_one_or_none.return_value = file
+    class DummyFile:
+        content_type = 'text/plain'
+        filename = 'test.txt'
+        storage_key = 'key'
+    dummy_file = DummyFile()
+    mock_result = MagicMock()
+    mock_result.scalar_one_or_none.return_value = dummy_file
+    session.execute.return_value = mock_result
     monkeypatch.setattr('download_file.service.minio_client.get_object', MagicMock(return_value=MagicMock()))
-    response, result_file = pytest.run(asyncio=True)(get_file_for_download)('file_id', 'user_id', session)
-    assert result_file == file
+    import uuid
+    response, result_file = await get_file_for_download(str(uuid.uuid4()), 'user_id', session)
+    assert result_file == dummy_file
     assert response is not None
 
 @pytest.mark.asyncio
-def test_get_file_for_download_not_found():
+async def test_get_file_for_download_not_found():
     session = AsyncMock()
-    session.execute.return_value.scalar_one_or_none.return_value = None
+    mock_result = MagicMock()
+    mock_result.scalar_one_or_none.return_value = None
+    session.execute.return_value = mock_result
+    import uuid
     with pytest.raises(HTTPException) as exc:
-        pytest.run(asyncio=True)(get_file_for_download)('file_id', 'user_id', session)
+        await get_file_for_download(str(uuid.uuid4()), 'user_id', session)
     assert exc.value.status_code == 404

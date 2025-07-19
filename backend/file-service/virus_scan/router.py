@@ -1,9 +1,9 @@
 from fastapi import APIRouter, UploadFile, File
 from .service import scan_file_with_clamav
 
-router = APIRouter()
+router = APIRouter(prefix="/scan", tags=["virus_scan"])
 
-@router.post("/scan", description="Проверка файла на вирусы с помощью ClamAV")
+@router.post("/", description="Проверка файла на вирусы с помощью ClamAV")
 async def scan_file(file: UploadFile = File(...)):
     content = await file.read()
     result = await scan_file_with_clamav(content, file.filename)
