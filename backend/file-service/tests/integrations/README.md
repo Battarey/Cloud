@@ -1,6 +1,5 @@
 # Интеграционные тесты для file-service
 
-
 ## Команда для запуска (запускать тесты по одному)
 ```
 docker compose run --rm file-service pytest tests/integrations/NAME_TEST.py
@@ -13,13 +12,13 @@ docker compose run --rm file-service pytest tests/integrations/NAME_TEST.py::NAM
 
 ## Структура и статистика тестов:
 ```
-test_create_folder.py             # Пройден, 1 предупреждение
-test_delete_file.py               # Пройден, 1 предупреждение
-test_delete_folder.py             # Пройден, 1 предупреждение
-test_download_file.py             # Пройден, 1 предупреждение
-test_list_files.py                # Пройден, 1 предупреждение
-test_rename.py                    # Пройден, 1 предупреждение
-test_upload_file.py               # Не пройден
+test_create_folder.py             # Пройден
+test_delete_file.py               # Пройден
+test_delete_folder.py             # Пройден
+test_download_file.py             # Пройден
+test_list_files.py                # Пройден
+test_rename.py                    # Пройден
+test_upload_file.py               # Пройден
 ```
 
 ## Подсказка

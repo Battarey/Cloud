@@ -4,10 +4,6 @@ import pytest
 from unittest.mock import AsyncMock, MagicMock
 from create_folder.service import create_folder
 
-import pytest
-from unittest.mock import AsyncMock, MagicMock
-from create_folder.service import create_folder
-
 @pytest.mark.asyncio
 async def test_create_folder(monkeypatch):
     session = AsyncMock()

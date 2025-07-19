@@ -2,6 +2,73 @@ import pytest
 import uuid
 
 @pytest.mark.asyncio
+async def test_upload_file_empty_content(async_client, mock_jwt_empty):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('empty.txt', b'', 'text/plain')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    # Пустой файл допустим, если нет ограничения, но можно ожидать 200 или 400
+    assert response.status_code in (200, 400)
+
+@pytest.mark.asyncio
+async def test_upload_file_invalid_symbols(async_client, mock_jwt_empty):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('bad|name.txt', b'data', 'text/plain')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    assert response.status_code == 400
+
+@pytest.mark.asyncio
+async def test_upload_file_no_extension(async_client, mock_jwt_empty):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('noextension', b'data', 'text/plain')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_upload_file_wrong_content_type(async_client, mock_jwt_empty):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('test.txt', b'data', 'application/unknown')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    # Если сервис не валидирует content_type, ожидаем 200
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_upload_file_invalid_token(async_client):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('test.txt', b'data', 'text/plain')},
+        headers={'Authorization': 'Bearer invalidtoken'}
+    )
+    assert response.status_code == 401
+
+@pytest.mark.asyncio
+async def test_upload_file_double_extension(async_client, mock_jwt_empty):
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': ('file.exe.txt', b'data', 'text/plain')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    # .exe.txt не запрещён, ожидаем 200
+    assert response.status_code == 200
+
+@pytest.mark.asyncio
+async def test_upload_file_too_long_name(async_client, mock_jwt_empty):
+    long_name = 'a' * 256 + '.txt'
+    response = await async_client.post(
+        '/files/upload',
+        files={'upload': (long_name, b'data', 'text/plain')},
+        headers={'Authorization': f'Bearer {mock_jwt_empty}'}
+    )
+    assert response.status_code == 400
+
+@pytest.mark.asyncio
 async def test_upload_file_success(async_client, mock_jwt_empty):
     unique_name = f"test_{uuid.uuid4().hex}.txt"
     response = await async_client.post(

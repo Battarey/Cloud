@@ -31,7 +31,6 @@ async def test_rename_file_not_found():
     session = AsyncMock()
     # Первый вызов - поиск по id, возвращаем None
     session.execute.return_value = MagicMock(scalar_one_or_none=MagicMock(return_value=None))
-    import uuid
     with pytest.raises(HTTPException) as exc:
         await rename_file(str(uuid.uuid4()), str(uuid.uuid4()), 'new.txt', session)
     assert exc.value.status_code == 404
@@ -53,7 +52,6 @@ async def test_rename_folder_success(monkeypatch):
     session.execute.side_effect = execute_side_effect
     session.commit = AsyncMock()
     session.refresh = AsyncMock()
-    import uuid
     result = await rename_folder(str(uuid.uuid4()), str(uuid.uuid4()), 'new_folder', session)
     assert result == folder
 
@@ -61,7 +59,6 @@ async def test_rename_folder_success(monkeypatch):
 async def test_rename_folder_not_found():
     session = AsyncMock()
     session.execute.return_value = MagicMock(scalar_one_or_none=MagicMock(return_value=None))
-    import uuid
     with pytest.raises(HTTPException) as exc:
         await rename_folder(str(uuid.uuid4()), str(uuid.uuid4()), 'new_folder', session)
     assert exc.value.status_code == 404

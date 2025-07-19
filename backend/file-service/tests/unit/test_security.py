@@ -12,7 +12,6 @@ def test_create_access_token():
     payload = jose_jwt.decode(token, os.getenv("SECRET_KEY", "secret"), algorithms=["HS256"])
     assert payload["sub"] == "user_id"
 
-import pytest
 @pytest.mark.asyncio
 async def test_get_current_user_valid(monkeypatch):
     token = create_access_token({"sub": "user_id"})
