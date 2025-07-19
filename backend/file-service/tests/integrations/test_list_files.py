@@ -1,6 +1,14 @@
 import pytest
 
 @pytest.mark.asyncio
+async def test_list_files_invalid_filter(async_client, mock_jwt):
+    response = await async_client.get(
+        '/files/?size_min=notanumber',
+        headers={'Authorization': f'Bearer {mock_jwt}'}
+    )
+    assert response.status_code == 422
+
+@pytest.mark.asyncio
 async def test_list_files_success(async_client, mock_jwt):
     response = await async_client.get(
         '/files/',

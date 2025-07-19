@@ -1,4 +1,38 @@
 import pytest
+import uuid
+import os
+from sqlalchemy.ext.asyncio import create_async_engine
+from sqlalchemy import text
+
+@pytest.mark.asyncio
+async def test_rename_file_invalid_name_existing(async_client, mock_jwt, test_user_id):
+    # Создаём файл
+    file_id = str(uuid.uuid4())
+    DATABASE_URL = os.environ["DATABASE_URL"]
+    engine = create_async_engine(DATABASE_URL, echo=False)
+    async with engine.begin() as conn:
+        await conn.execute(
+            text("""
+                INSERT INTO files (id, user_id, filename, size, content_type, storage_key, created_at)
+                VALUES (:id, :user_id, 'file1.txt', 1, 'text/plain', 'key1', now())
+            """),
+            {"id": file_id, "user_id": test_user_id}
+        )
+    response = await async_client.patch(
+        f'/files/{file_id}',
+        params={'new_name': 'bad|name.txt'},
+        headers={'Authorization': f'Bearer {mock_jwt}'}
+    )
+    assert response.status_code == 400
+
+@pytest.mark.asyncio
+async def test_rename_file_invalid_name_not_found(async_client, mock_jwt):
+    response = await async_client.patch(
+        '/files/nonexistent-file-id',
+        params={'new_name': 'bad|name.txt'},
+        headers={'Authorization': f'Bearer {mock_jwt}'}
+    )
+    assert response.status_code == 404
 
 @pytest.mark.asyncio
 async def test_rename_file_to_existing(async_client, mock_jwt, test_user_id):
@@ -25,7 +59,6 @@ async def test_rename_file_to_existing(async_client, mock_jwt, test_user_id):
         headers={'Authorization': f'Bearer {mock_jwt}'}
     )
     assert resp.status_code in (400, 409)
-import pytest
 
 @pytest.mark.asyncio
 async def test_rename_file_success(async_client, mock_jwt):
@@ -36,7 +69,6 @@ async def test_rename_file_success(async_client, mock_jwt):
     )
     assert response.status_code in (200, 404)
 
-
 @pytest.mark.asyncio
 async def test_rename_file_not_found(async_client, mock_jwt):
     response = await async_client.patch(
@@ -45,7 +77,6 @@ async def test_rename_file_not_found(async_client, mock_jwt):
         headers={'Authorization': f'Bearer {mock_jwt}'}
     )
     assert response.status_code == 404
-
 
 @pytest.mark.asyncio
 async def test_rename_file_unauthorized(async_client):

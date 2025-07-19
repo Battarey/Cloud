@@ -16,3 +16,4 @@ pytest
 pytest-asyncio 
 psycopg2-binary
 aiofiles
+PyJWT

@@ -18,7 +18,14 @@ async def scan_file_for_viruses(file_bytes: bytes, filename: str) -> bool:
 async def save_uploaded_file(upload, user_id: str, session: AsyncSession) -> FileRead:
     # Валидация имени файла
     filename = upload.filename
-    if not filename or len(filename) > 255 or re.search(r'[\\/:*?"<>|]', filename):
+    # Защита от SQL-инъекций: запрещаем одинарную кавычку, точку с запятой, двойной дефис
+    if (
+        not filename
+        or len(filename) > 255
+        or re.search(r"[\\/:*?\"<>|']", filename)
+        or ';' in filename
+        or '--' in filename
+    ):
         raise HTTPException(status_code=400, detail="Invalid file name")
     # Запрещённые расширения
     forbidden_exts = {'.exe', '.bat', '.cmd', '.sh'}

@@ -1,6 +1,29 @@
 import pytest
 
 @pytest.mark.asyncio
+async def test_delete_file_other_user(async_client, mock_jwt, test_user_id):
+    import uuid, os
+    from sqlalchemy.ext.asyncio import create_async_engine
+    from sqlalchemy import text
+    file_id = str(uuid.uuid4())
+    storage_key = f"test/{file_id}.txt"
+    DATABASE_URL = os.environ["DATABASE_URL"]
+    engine = create_async_engine(DATABASE_URL, echo=False)
+    async with engine.begin() as conn:
+        await conn.execute(
+            text("""
+                INSERT INTO files (id, user_id, filename, size, content_type, storage_key, created_at)
+                VALUES (:id, :other_user, 'other.txt', 1, 'text/plain', :storage_key, now())
+            """),
+            {"id": file_id, "other_user": str(uuid.uuid4()), "storage_key": storage_key}
+        )
+    response = await async_client.delete(
+        f'/files/{file_id}',
+        headers={'Authorization': f'Bearer {mock_jwt}'}
+    )
+    assert response.status_code == 404
+
+@pytest.mark.asyncio
 async def test_delete_file_unauthorized(async_client, test_user_id):
     # Создаём файл в базе и Minio
     import uuid, os

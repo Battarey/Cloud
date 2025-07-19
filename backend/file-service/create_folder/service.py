@@ -10,6 +10,9 @@ class FolderCreateError(Exception):
         self.detail = detail
 
 async def create_folder(user_id: str, folder_name: str, session: AsyncSession):
+    # Явная проверка типа
+    if not isinstance(folder_name, str):
+        raise FolderCreateError(422, "Folder name must be a string")
     # Проверка на пустое имя
     if not folder_name or folder_name.strip() == "":
         raise FolderCreateError(422, "Folder name cannot be empty")
@@ -20,16 +23,27 @@ async def create_folder(user_id: str, folder_name: str, session: AsyncSession):
     if not re.match(r'^[\w\- ]+$', folder_name):
         raise FolderCreateError(400, "Folder name contains invalid characters")
 
-    # Проверка на дубликаты
-    query = select(FileModel).where(
+    # Проверка на дубликаты папки
+    query_folder = select(FileModel).where(
         FileModel.user_id == user_id,
         FileModel.filename == folder_name,
         FileModel.content_type == 'folder'
     )
-    result = await session.execute(query)
-    existing = result.scalar_one_or_none()
-    if existing:
+    result_folder = await session.execute(query_folder)
+    existing_folder = result_folder.scalar_one_or_none()
+    if existing_folder:
         raise FolderCreateError(409, "Folder already exists")
+
+    # Проверка на конфликт с файлом
+    query_file = select(FileModel).where(
+        FileModel.user_id == user_id,
+        FileModel.filename == folder_name,
+        FileModel.content_type != 'folder'
+    )
+    result_file = await session.execute(query_file)
+    existing_file = result_file.scalar_one_or_none()
+    if existing_file:
+        raise FolderCreateError(409, "Folder name conflicts with existing file")
 
     # Папка как файл с content_type = 'folder', size = 0
     folder_id = str(uuid.uuid4())
