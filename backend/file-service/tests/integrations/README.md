@@ -16,6 +16,7 @@ test_create_folder.py             # Пройден
 test_delete_file.py               # Пройден
 test_delete_folder.py             # Пройден
 test_download_file.py             # Пройден
+test_generate_link.py             # Не пройден
 test_list_files.py                # Пройден
 test_rename.py                    # Пройден
 test_upload_file.py               # Пройден

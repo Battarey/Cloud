@@ -8,6 +8,7 @@ from download_file.router import router as download_file_router
 from list_files.router import router as list_files_router
 from rename.router import router as rename_file_router
 from virus_scan.router import router as virus_scan_router
+from generate_link.router import router as generate_link_router
 
 app = FastAPI(title="File Service")
 
@@ -18,6 +19,8 @@ app.include_router(delete_folder_router)
 app.include_router(download_file_router)
 app.include_router(list_files_router)
 app.include_router(rename_file_router)
+
+app.include_router(generate_link_router)
 app.include_router(virus_scan_router)
 
 @app.get("/")

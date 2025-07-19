@@ -22,6 +22,7 @@ docker compose run --rm file-service pytest tests/unit/NAME_TEST.py::NAME_FUNCTI
 - test_delete_folder.py      # Пройден
 - test_download_file.py      # Пройден
 - test_filtration.py         # Пройден
+- test_generate_link.py      # Пройден
 - test_list_files.py         # Пройден
 - test_minio_utils.py        # Пройден
 - test_models.py             # Пройден
