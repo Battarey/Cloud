@@ -1,11 +1,16 @@
 from sqlalchemy.ext.asyncio import AsyncSession
 from models.file import File as FileModel
-from minio_utils.minio_client import minio_client, MINIO_BUCKET
+from minio_utils.minio_client import async_remove_object, MINIO_BUCKET
 from minio.error import S3Error
 from sqlalchemy.future import select
 import uuid
 
-async def delete_folder_by_id(folder_id: str, user_id: str, session: AsyncSession):
+async def delete_folder_by_id(
+    folder_id: str,
+    user_id: str,
+    session: AsyncSession,
+    remove_object_func=async_remove_object
+):
     # Проверка корректности UUID
     try:
         folder_uuid = uuid.UUID(folder_id)
@@ -24,7 +29,7 @@ async def delete_folder_by_id(folder_id: str, user_id: str, session: AsyncSessio
     try:
         for file in files:
             try:
-                minio_client.remove_object(MINIO_BUCKET, file.storage_key)
+                await remove_object_func(MINIO_BUCKET, file.storage_key)
             except S3Error as e:
                 # Если объект не найден — игнорируем, иначе пробрасываем ошибку
                 if e.code != "NoSuchKey":

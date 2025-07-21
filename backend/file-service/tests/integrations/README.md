@@ -12,12 +12,13 @@ docker compose run --rm file-service pytest tests/integrations/NAME_TEST.py::NAM
 
 ## Структура и статистика тестов:
 ```
+test_chunk_upload.py              # Пройден
 test_create_folder.py             # Пройден
-test_delete_file.py               # Пройден
-test_delete_folder.py             # Пройден
+test_delete_file.py               # Пройден, добавить больше сценариев
+test_delete_folder.py             # Пройден, добавить больше сценариев
 test_download_file.py             # Пройден
-test_generate_link.py             # Не пройден
-test_list_files.py                # Пройден
+test_generate_link.py             # Пройден
+test_list_files.py                # Пройден, добавить больше сценариев
 test_rename.py                    # Пройден
 test_upload_file.py               # Пройден
 ```
