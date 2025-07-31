@@ -2,38 +2,43 @@ services:
   user-service:
     build:
       context: .
-      dockerfile: user-service/Dockerfile
+      dockerfile: user_service/Dockerfile
     ports:
       - "8001:8000"
     environment:
       - ENV=dev
-      - DATABASE_URL=postgresql+asyncpg://clouduser:cloudpass@postgres:5432/user_db
-    command: >
-      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+      - DATABASE_URL=postgresql+asyncpg://clouduser:cloudpass@postgres:5432/cloud_db
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
     depends_on:
-      - postgres
+      postgres:
+        condition: service_healthy
     volumes:
-      - ./user-service:/app/user-service
+      - ./user_service:/app/user_service
+      - ./alembic:/app/alembic
+      - ./alembic/alembic.ini:/app/alembic.ini
   file-service:
     build:
       context: .
-      dockerfile: file-service/Dockerfile
+      dockerfile: file_service/Dockerfile
     ports:
       - "8002:8000"
     environment:
       - ENV=dev
-      - DATABASE_URL=postgresql+asyncpg://clouduser:cloudpass@postgres:5432/file_db
+      - DATABASE_URL=postgresql+asyncpg://clouduser:cloudpass@postgres:5432/cloud_db
       - MINIO_ENDPOINT=${MINIO_ENDPOINT}
       - MINIO_ACCESS_KEY=${MINIO_ACCESS_KEY}
       - MINIO_SECRET_KEY=${MINIO_SECRET_KEY}
       - MINIO_BUCKET=${MINIO_BUCKET}
     volumes:
-      - ./file-service/alembic/versions:/app/file-service/alembic/versions
-      - ./file-service:/app/file-service
-    command: >
-      sh -c "alembic upgrade head && uvicorn main:app --host 0.0.0.0 --port 8000"
+      - ./file_service:/app/file_service
+      - ./alembic:/app/alembic
+      - ./alembic/alembic.ini:/app/alembic.ini
+    command: uvicorn main:app --host 0.0.0.0 --port 8000
     depends_on:
-      - postgres
+      alembic:
+        condition: service_completed_successfully
+      postgres:
+        condition: service_healthy
   gateway:
     build: ./gateway
     ports:
@@ -45,19 +50,17 @@ services:
     environment:
       POSTGRES_USER: clouduser
       POSTGRES_PASSWORD: cloudpass
-      POSTGRES_DB: user_db
+      POSTGRES_DB: cloud_db
     ports:
       - "5432:5432"
     volumes:
       - pgdata:/var/lib/postgresql/data
     command: ["postgres", "-c", "shared_preload_libraries=pgcrypto"]
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U clouduser -d user_db && pg_isready -U clouduser -d file_db"]
-      interval: 60s
+      test: ["CMD-SHELL", "pg_isready -U clouduser -d cloud_db"]
+      interval: 5s
       timeout: 5s
-      retries: 3
-    # Создание второй базы file_db при старте
-    entrypoint: ["/bin/sh", "-c", "docker-entrypoint.sh postgres & sleep 5 && (psql -U clouduser -d user_db -tc \"SELECT 1 FROM pg_database WHERE datname = 'file_db'\" | grep -q 1 || psql -U clouduser -d user_db -c 'CREATE DATABASE file_db;') && wait"]
+      retries: 10
   minio:
     image: minio/minio:latest
     command: server /data --console-address ":9001"
@@ -73,6 +76,22 @@ services:
     image: redis:7-alpine
     ports:
       - "6379:6379"
+  alembic:
+    build:
+      context: .
+      dockerfile: alembic/Dockerfile
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://clouduser:cloudpass@postgres:5432/cloud_db
+    volumes:
+      - ./alembic:/app/alembic
+      - ./alembic/alembic.ini:/app/alembic.ini
+      - ./user_service/models:/app/user_service/models
+      - ./file_service/models:/app/file_service/models
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: ["/app/entrypoint.sh", "alembic"]
+
 volumes:
   pgdata:
   minio-data:
